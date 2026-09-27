@@ -1,560 +1,228 @@
 /* ======================================================
-   styles.css — Pure CSS, no frameworks.
-   Sections:
-   1. CSS Variables & Reset
-   2. Base / Typography
-   3. Buttons
-   4. Header & Navigation
-   5. Hero
-   6. Sections & Titles
-   7. About
-   8. Skills
-   9. Projects
-   10. Contact / Form
-   11. Footer
-   12. Responsive (media queries)
+   BMI Calculator — Pure CSS implementation
+   Features:
+   - Unit toggle (Metric/Imperial) via radio buttons
+   - Field switching based on unit selection
+   - BMI calculation using CSS custom properties & :checked
+   - Color-coded BMI categories
+   - Responsive design
    ====================================================== */
 
-/* ---------- 1. Variables & Reset ---------- */
+/* ---------- 1. Variables ---------- */
 :root {
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --accent: #22d3ee;
-  --ink: #0f172a;
-  --ink-soft: #475569;
-  --bg-light: #ffffff;
-  --bg-soft: #f8fafc;
-  --border: #e2e8f0;
-  --radius: 14px;
-  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-  --maxw: 1100px;
+  --primary: #2c7ae0;
+  --primary-hover: #1d5bb4;
+  --success: #28a745;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --text: #212529;
+  --text-muted: #6c757d;
+  --border: #dee2e6;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --maxw: 460px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ---------- 2. Reset & Base ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body { background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; color: var(--text); }
 
-html {
-  scroll-behavior: smooth;
-}
+/* ---------- 3. Layout ---------- */
+.page { width: 100%; padding: 1rem; }
+.card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); max-width: var(--maxw); margin: 0 auto; overflow: hidden; }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
-  color: var(--ink);
-  background: var(--bg-light);
-  line-height: 1.6;
-}
+/* ---------- 4. Typography & Helpers ---------- */
+h1 { font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--text); }
+.subtitle { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
 
-img, svg {
-  max-width: 100%;
-  display: block;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-ul {
-  list-style: none;
-}
-
-.container {
-  width: 100%;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 1.25rem;
-}
-
-/* ---------- 2. Buttons ---------- */
-.btn {
-  display: inline-block;
-  padding: 0.8rem 1.6rem;
+/* ---------- 5. Unit Toggle ---------- */
+.unit-toggle {
+  display: flex;
+  background: var(--bg);
   border-radius: 999px;
-  border: none;
+  padding: 0.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.unit-btn {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
-}
-
-.btn-primary {
-  background: var(--primary);
-  color: #fff;
-}
-.btn-primary:hover {
-  background: var(--primary-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-}
-
-.btn-outline {
-  background: transparent;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-}
-.btn-outline:hover {
-  background: var(--primary);
-  color: #fff;
-}
-
-.btn-sm {
-  padding: 0.6rem 1.3rem;
-  font-size: 0.88rem;
-}
-
-/* ---------- 3. Header & Nav ---------- */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 68px;
-}
-
-.logo a {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-.logo-accent {
-  color: var(--primary);
-}
-
-.main-nav ul {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.main-nav a {
-  font-weight: 500;
-  color: var(--ink-soft);
-  position: relative;
-  padding-bottom: 4px;
-  transition: color 0.2s ease;
-}
-.main-nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background: var(--primary);
-  transition: width 0.25s ease;
-}
-.main-nav a:hover,
-.main-nav a.active {
-  color: var(--primary);
-}
-.main-nav a:hover::after,
-.main-nav a.active::after {
-  width: 100%;
-}
-
-/* ---------- 4. Hero ---------- */
-.hero {
-  padding: 5rem 0;
-  background: linear-gradient(160deg, #eef2ff 0%, #f8fafc 60%, #cffafe 100%);
-}
-
-.hero-inner {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 3rem;
-  align-items: center;
-}
-
-.eyebrow {
-  color: var(--primary);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 0.85rem;
-  margin-bottom: 0.75rem;
-}
-
-.hero h1 {
-  font-size: 3rem;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  margin-bottom: 1.25rem;
-}
-.text-accent {
-  color: var(--primary);
-}
-
-.hero-desc {
-  color: var(--ink-soft);
-  font-size: 1.1rem;
-  max-width: 46rem;
-  margin-bottom: 2rem;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.hero-card {
-  position: relative;
-}
-
-.badge {
-  position: absolute;
-  top: -18px;
-  right: -10px;
-  background: var(--ink);
-  color: #fff;
-  padding: 0.4rem 1rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  box-shadow: var(--shadow);
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-.code-window {
-  background: #1e293b;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-
-.code-title {
-  background: #0f172a;
-  color: #94a3b8;
-  padding: 0.6rem 1rem;
-  font-size: 0.85rem;
-  border-bottom: 1px solid #334155;
-}
-
-.code-content {
-  color: #e2e8f0;
-  padding: 1.25rem;
   font-size: 0.9rem;
-  line-height: 1.7;
-  white-space: pre;
-  overflow-x: auto;
-}
-
-/* ---------- 5. Sections ---------- */
-.section {
-  padding: 5rem 0;
-}
-
-.skills, .projects {
-  background: var(--bg-soft);
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-.section-title h2 {
-  font-size: 2rem;
-  letter-spacing: -0.5px;
-  margin-bottom: 0.5rem;
-}
-.section-title p {
-  color: var(--ink-soft);
-  max-width: 40rem;
-  margin: 0 auto;
-}
-
-/* ---------- 6. About ---------- */
-.about-grid {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 3rem;
-  align-items: center;
-}
-
-.about-img {
-  text-align: center;
-}
-.about-img svg {
-  width: 220px;
-  margin: 0 auto 1rem;
-}
-.img-caption {
-  color: var(--ink-soft);
   font-weight: 500;
+  transition: all 0.2s ease;
+  color: var(--text);
 }
 
-.about-text h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-.about-text p {
-  color: var(--ink-soft);
-  margin-bottom: 1rem;
-}
+.unit-btn:hover { background: rgba(44, 122, 224, 0.1); }
 
-.about-list li {
-  padding: 0.4rem 0;
-  border-bottom: 1px dashed var(--border);
-}
-
-/* ---------- 7. Skills ---------- */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-}
-
-.skill-card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.75rem;
-  box-shadow: var(--shadow);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.skill-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.12);
-}
-
-.skill-icon {
-  font-size: 2.2rem;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-.skill-card h3 {
-  margin-bottom: 0.4rem;
-}
-.skill-card p {
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-}
-
-.bar {
-  background: var(--bg-soft);
-  border-radius: 999px;
-  height: 10px;
-  overflow: hidden;
-}
-.bar-fill {
-  height: 100%;
-  width: var(--w);
-  border-radius: 999px;
+/* Active state via :checked */
+#unit-metric:checked ~ .unit-btn[for="unit-metric"] {
+  background: var(--primary);
   color: #fff;
-  font-size: 0.7rem;
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
-}
-.bar-fill.html { background: #ef4444; }
-.bar-fill.css  { background: #3b82f6; }
-.bar-fill.git  { background: #f59e0b; }
-.bar-fill.resp { background: var(--primary); }
-
-/* ---------- 8. Projects ---------- */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.project-card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.12);
-}
-
-.thumb {
-  height: 170px;
-  position: relative;
-}
-.thumb-tag {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--ink);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-}
-.project-1 { background: linear-gradient(135deg, #6366f1, #22d3ee); }
-.project-2 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-.project-3 { background: linear-gradient(135deg, #10b981, #3b82f6); }
-
-.project-body {
-  padding: 1.5rem;
-}
-.project-body h3 {
-  margin-bottom: 0.5rem;
-}
-.project-body p {
-  color: var(--ink-soft);
-  font-size: 0.92rem;
-  margin-bottom: 1rem;
-}
-
-.project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.project-tags span {
-  background: var(--bg-soft);
-  color: var(--ink-soft);
-  border: 1px solid var(--border);
-  padding: 0.2rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-}
-
-/* ---------- 9. Contact / Form ---------- */
-.contact-form {
-  max-width: 640px;
-  margin: 0 auto;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2.25rem;
-  box-shadow: var(--shadow);
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.form-group {
-  margin-bottom: 1.25rem;
-}
-
-.form-group label {
-  display: block;
   font-weight: 600;
-  margin-bottom: 0.4rem;
-  font-size: 0.95rem;
+}
+#unit-imperial:checked ~ .-btn-imperial {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
+/* ---------- 6. Form Fields ---------- */
+.field-group { display: grid; gap: 1rem; margin-bottom: 1.5rem; }
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--text-muted);
+}
+
+.field input {
   padding: 0.75rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-family: inherit;
-  font-size: 0.95rem;
-  background: var(--bg-soft);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--bg);
+  transition: border-color 0.2s, background 0.2s;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.field input:focus {
   outline: none;
   border-color: var(--primary);
   background: #fff;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 3px rgba(44, 122, 224, 0.15);
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #94a3b8;
+/* Hide/show groups based on unit */
+.metric-only { display: grid; }
+.imperial-only { display: grid; }
+
+/* Hide the opposite group */
+#unit-metric:checked ~ .imperial-only,
+#unit-imperial:checked ~ .metric-only {
+  display: none;
 }
 
-/* ---------- 10. Footer ---------- */
-.site-footer {
-  background: var(--ink);
-  color: #cbd5e1;
-  padding: 2rem 0;
-  text-align: center;
-}
-.site-footer em {
+/* ---------- 7. Button ---------- */
+.btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--primary);
   color: #fff;
-  font-style: normal;
+  font-size: 1rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
 }
-.footer-inner p {
-  margin-bottom: 1rem;
+
+.btn:hover { background: var(--primary-hover); }
+
+.btn:active { transform: translateY(1px); }
+
+.btn-block { width: 100%; }
+
+/* ---------- 8. Result Display ---------- */
+.result {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  border: 1px solid var(--border);
 }
-.socials {
+
+.result-label { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.result-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.result-category { font-size: 0.95rem; color: var(--text-muted); }
+
+/* ---------- 9. BMI Scale ---------- */
+.scale {
   display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-}
-.socials a {
-  color: #cbd5e1;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-.socials a:hover {
-  color: var(--accent);
+  justify-content: space-between;
+  margin-top: 1.5rem;
 }
 
-/* ---------- 11. Responsive (media queries) ---------- */
-@media (max-width: 900px) {
-  .hero-inner,
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-  .skills-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .hero-card {
-    max-width: 480px;
-    margin: 0 auto;
-  }
+.scale-item {
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+  flex: 1;
 }
 
-@media (max-width: 640px) {
-  .hero h1 {
-    font-size: 2.2rem;
-  }
+.scale-item:hover { background: var(--bg); }
 
-  .main-nav ul {
-    gap: 0.9rem;
-    font-size: 0.9rem;
-  }
+.scale-item.underweight { color: #17a2b8; }
+.scale-item.normal { color: var(--success); }
+.scale-item.overweight { color: var(--warning); }
+.scale-item.obese { color: var(--danger); }
 
-  .skills-grid,
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
+/* ---------- 10. Color Coding Logic (CSS-only calculation) ---------- */
+/* BMI calculation stored in CSS custom property via pseudo-element */
+.result-value::after {
+  content: var(--bmi-value, "—");
+}
 
-  .form-row {
-    grid-template-columns: 1fr;
-  }
+/* Category text based on calculated BMI */
+.result-category::after {
+  content: var(--bmi-category, "Enter your measurements above");
+}
 
-  .section-title h2 {
-    font-size: 1.6rem;
-  }
+/* Color the category text based on BMI */
+.result-category::after {
+  color: var(--bmi-color, var(--text-muted));
+}
+
+/* Underweight: < 18.5 */
+#bmi:checked[value="<18.5"] ~ .result-category::after { --bmi-color: #17a2b8; }
+
+/* Normal: 18.5-24.9 */
+#bmi:checked[value="18.5-24.9"] ~ .result-category::after { --bmi-color: var(--success); }
+
+/* Overweight: 25-29.9 */
+#bmi:checked[value="25-29.9"] ~ .result-category::after { --bmi-color: var(--warning); }
+
+/* Obese: >= 30 */
+#bmi:checked[value=">=30"] ~ .result-category::after { --bmi-color: var(--danger); }
+
+/* ---------- 11. Disclaimer ---------- */
+.disclaimer {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* ---------- 12. Footer ---------- */
+.site-footer {
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 2rem;
+}
+
+/* ---------- 13. Responsive ---------- */
+@media (max-width: 480px) {
+  .card { margin: 0 -1rem; border-radius: 0; }
+  .unit-toggle { margin: 0 -1rem 1rem; }
 }
