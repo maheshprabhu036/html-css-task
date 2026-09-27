@@ -1,21 +1,22 @@
-# BMI Calculator — Pure HTML & CSS Tool
+# BMI Calculator — Practical Health Tool
 
-A practical, everyday health calculator built **without JavaScript** using semantic HTML and modern CSS. Features metric/imperial unit switching, responsive design, and color-coded BMI categories.
+A real-world Body Mass Index calculator built with **HTML, CSS, and minimal JavaScript**. Features metric/imperial switching, input validation, responsive design, and a polished Chrome-like experience.
 
 ![GitHub Pages](https://img.shields.io/badge/deploy-GitHub%20Pages-blue)
 
 ## ✨ Features
-- **Zero JavaScript** — everything works via HTML form + CSS `:checked` logic
+- **Chrome-like UI** — modern styling, smooth transitions, micro-interactions
 - **Metric / Imperial toggle** — radio buttons switch units and fields instantly
-- **CSS-only calculation** — uses custom properties to display results
-- **Responsive** — works on mobile and desktop
-- **Accessible** — proper labels, ARIA roles, semantic markup
+- **Input validation** — real-time error messages and range checking
+- **Responsive** — works perfectly on mobile and desktop
+- **PWA-ready** — manifest and icons for app-like feel
+- **Accessible** — semantic markup, ARIA labels, keyboard navigation
 
-## 🛠️ How It Works (Technical)
-- `<input type="radio">` for unit selection
-- CSS `:checked` to show/hide field groups
-- Custom properties (`--bmi-value`, `--bmi-category`) for the result
-- Color coding based on BMI ranges (blue → green → yellow → red)
+## 🛠️ Tech Stack
+- **HTML5** — semantic structure, forms, accessibility
+- **CSS3** — custom properties, Flexbox, responsive design, animations
+- **JavaScript** — minimal calculation logic (no external libraries)
+- **Git & GitHub** — version control, Pages deployment
 
 ## 🚀 Run locally
 ```bash
@@ -27,6 +28,12 @@ Or serve with Python:
 python3 -m http.server 8000
 # Visit http://localhost:8000
 ```
+
+## 📱 Install as a PWA (Chrome on mobile)
+1. Open `https://YOUR_USERNAME.github.io/html-css-task` in Chrome
+2. Tap the **Share** icon → **Add to Home Screen**
+3. Choose a name and tap **Add**
+4. The app installs as a standalone web app
 
 ## 📦 Git & GitHub workflow
 ```bash
@@ -40,15 +47,15 @@ git push -u origin main
 # https://github.com/YOUR_USERNAME/html-css-task/settings/pages
 ```
 
-## 🖥️ Demo Screenshot
+## 🖥️ Screenshot
 
 ![BMI Calculator Screenshot](https://i.imgur.com/placeholder.png)
 
-## 📚 Built with
-- HTML5 (semantic, forms, accessibility)
-- CSS3 (variables, Flexbox, Grid, custom properties)
-- Git & GitHub
+## 📚 Built for Day 1-3 HTML/CSS Learning
+- Day 1: Semantic HTML, forms, inputs, accessibility
+- Day 2: CSS variables, Flexbox, responsive design, animations
+- Day 3: Complete app + Git + deployment
 
 ---
 
-© 2026 — Built with pure HTML & CSS for real-world use.
+© 2026 — Built with HTML, CSS, & minimal JS for real-world use.
