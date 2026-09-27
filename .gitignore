@@ -1,0 +1,4 @@
+// .gitignore — nothing heavy here, keep it minimal for a static site.
+.DS_Store
+*.log
+node_modules/
