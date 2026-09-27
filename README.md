@@ -1,61 +1,50 @@
-# BMI Calculator — Practical Health Tool
+# BMI Calculator — Polished Web App
 
-A real-world Body Mass Index calculator built with **HTML, CSS, and minimal JavaScript**. Features metric/imperial switching, input validation, responsive design, and a polished Chrome-like experience.
+A production-quality Body Mass Index calculator with dark mode, animated UI, real-time validation, and smooth animations. Built with plain HTML, CSS, and minimal JavaScript — no frameworks.
 
 ![GitHub Pages](https://img.shields.io/badge/deploy-GitHub%20Pages-blue)
 
 ## ✨ Features
-- **Chrome-like UI** — modern styling, smooth transitions, micro-interactions
-- **Metric / Imperial toggle** — radio buttons switch units and fields instantly
-- **Input validation** — real-time error messages and range checking
-- **Responsive** — works perfectly on mobile and desktop
-- **PWA-ready** — manifest and icons for app-like feel
-- **Accessible** — semantic markup, ARIA labels, keyboard navigation
+- **Dark mode** — automatic via `prefers-color-scheme`, manual via `[data-theme]`
+- **Animated unit toggle** — sliding thumb with cubic-bezier easing
+- **Real-time validation** — inline errors, disabled Calculate button until valid
+- **Result animation** — fade + slide-up entrance with reflow trigger
+- **Legend highlight** — `color-mix()` background + inset shadow on active category
+- **Healthy weight range** — shows in kg **or** lb matching current unit
+- **Full accessibility** — `aria-live`, proper labels, `focus-visible`, `role=alert`
+- **Reduced motion** — respects `prefers-reduced-motion`
+- **Safe area insets** — handles notched devices
+- **System font stack** — Manrope (display) + Inter (UI)
 
 ## 🛠️ Tech Stack
-- **HTML5** — semantic structure, forms, accessibility
-- **CSS3** — custom properties, Flexbox, responsive design, animations
-- **JavaScript** — minimal calculation logic (no external libraries)
-- **Git & GitHub** — version control, Pages deployment
+- **HTML5** — semantic, accessible, no external deps
+- **CSS3** — custom properties, `color-mix()`, transitions, dark mode
+- **JavaScript** — single IIFE module, no frameworks
+- **PWA-ready** — `site.webmanifest` + icons for "Add to Home Screen"
 
 ## 🚀 Run locally
 ```bash
-open index.html
-```
-
-Or serve with Python:
-```bash
+cd ~/MyProjects/html-css-task
 python3 -m http.server 8000
 # Visit http://localhost:8000
 ```
 
-## 📱 Install as a PWA (Chrome on mobile)
-1. Open `https://YOUR_USERNAME.github.io/html-css-task` in Chrome
-2. Tap the **Share** icon → **Add to Home Screen**
-3. Choose a name and tap **Add**
-4. The app installs as a standalone web app
+## 📱 Install as PWA (Chrome / Edge / Safari)
+1. Open the deployed URL
+2. Tap Share → **Add to Home Screen**
+3. Opens as standalone app
 
-## 📦 Git & GitHub workflow
+## 📦 Git & GitHub
 ```bash
-# Add remote (replace with your repo URL)
-git remote add origin https://github.com/YOUR_USERNAME/html-css-task.git
-
-# Push (you may be prompted for a Personal Access Token)
 git push -u origin main
-
-# Enable GitHub Pages:
-# https://github.com/YOUR_USERNAME/html-css-task/settings/pages
 ```
+Then enable GitHub Pages: Settings → Pages → Deploy from branch → `main` / `root`
 
-## 🖥️ Screenshot
-
-![BMI Calculator Screenshot](https://i.imgur.com/placeholder.png)
-
-## 📚 Built for Day 1-3 HTML/CSS Learning
-- Day 1: Semantic HTML, forms, inputs, accessibility
-- Day 2: CSS variables, Flexbox, responsive design, animations
-- Day 3: Complete app + Git + deployment
+## 📚 Learning Outcomes (Day 1-3)
+- Day 1: Semantic HTML, forms, labels, accessibility attributes
+- Day 2: CSS variables, dark mode, transitions, `color-mix()`, layout
+- Day 3: Full app + Git + GitHub Pages deployment
 
 ---
 
-© 2026 — Built with HTML, CSS, & minimal JS for real-world use.
+© 2026 — Built with HTML, CSS, & minimal JS.

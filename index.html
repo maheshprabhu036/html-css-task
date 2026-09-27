@@ -2,282 +2,344 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BMI Calculator — a practical health tool built with HTML, CSS, and minimal JavaScript.">
-  <meta name="theme-color" content="#2c7ae0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>BMI Calculator</title>
+  <meta name="theme-color" content="#2B5FB0">
+  <meta name="description" content="BMI Calculator — a practical health tool built with HTML, CSS, and minimal JavaScript.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
 <body>
+<main>
+  <div class="card">
+    <h1>BMI Calculator</h1>
+    <p class="subtitle">Body Mass Index — quick health check</p>
 
-  <main class="page">
-    <!-- TOOL CARD -->
-    <section class="card tool" role="main" aria-label="BMI Calculator">
-      <header class="card-header">
-        <h1>BMI Calculator</h1>
-        <p class="subtitle">Body Mass Index — quick health check</p>
-      </header>
+    <div class="unit-toggle" id="unit-toggle" data-unit="metric">
+      <div class="unit-toggle-thumb" aria-hidden="true"></div>
+      <input type="radio" name="unit" id="unit-metric" value="metric" checked>
+      <label for="unit-metric">Metric</label>
+      <input type="radio" name="unit" id="unit-imperial" value="imperial">
+      <label for="unit-imperial">Imperial</label>
+    </div>
 
-      <!-- Unit toggle -->
-      <div class="unit-toggle" role="group" aria-label="Units">
-        <input type="radio" name="unit" id="unit-metric" value="metric" checked>
-        <label for="unit-metric" class="unit-btn">Metric</label>
-        <input type="radio" name="unit" id="unit-imperial" value="imperial">
-        <label for="unit-imperial" class="unit-btn">Imperial</label>
+    <form id="bmi-form" novalidate>
+      <!-- Weight -->
+      <div class="field-group">
+        <label class="field-label" for="weight-kg" id="weight-label">Weight (kg)</label>
+        <input type="number" id="weight-kg" inputmode="decimal" step="0.1" placeholder="e.g. 68">
+        <input type="number" id="weight-lb" inputmode="decimal" step="0.1" placeholder="e.g. 150" style="display:none;">
+        <div class="error-msg" id="weight-error" role="alert"></div>
       </div>
 
-      <!-- Form -->
-      <form class="bmi-form" id="bmi-form" novalidate>
-        <!-- Metric fields -->
-        <div class="field-group metric-fields">
+      <!-- Height -->
+      <div class="field-group">
+        <label class="field-label" id="height-label">Height (cm)</label>
+        <input type="number" id="height-cm" inputmode="decimal" step="0.1" placeholder="e.g. 170">
+        <div class="field-row" id="height-imperial-row" style="display:none;">
           <div class="field">
-            <label for="weight-kg">Weight (kg)</label>
-            <input type="number" id="weight-kg" name="weight" min="2" step="0.1" placeholder="e.g. 70" required>
-            <span class="error-msg" data-for="weight-kg">Required, 2–300 kg</span>
+            <input type="number" id="height-ft" inputmode="numeric" step="1" placeholder="ft" aria-label="Height, feet">
           </div>
           <div class="field">
-            <label for="height-cm">Height (cm)</label>
-            <input type="number" id="height-cm" name="height" min="50" step="0.1" placeholder="e.g. 175" required>
-            <span class="error-msg" data-for="height-cm">Required, 50–250 cm</span>
+            <input type="number" id="height-in" inputmode="decimal" step="0.1" placeholder="in" aria-label="Height, inches">
           </div>
         </div>
-
-        <!-- Imperial fields -->
-        <div class="field-group imperial-fields">
-          <div class="field">
-            <label for="weight-lb">Weight (lb)</label>
-            <input type="number" id="weight-lb" name="weight" min="2" step="0.1" placeholder="e.g. 154" required>
-            <span class="error-msg" data-for="weight-lb">Required, 2–300 lb</span>
-          </div>
-          <div class="field">
-            <label for="height-ft">Height (ft)</label>
-            <input type="number" id="height-ft" name="height-ft" min="1" step="1" placeholder="e.g. 5" required>
-            <span class="error-msg" data-for="height-ft">Required, 1–10 ft</span>
-          </div>
-          <div class="field">
-            <label for="height-in">Height (in)</label>
-            <input type="number" id="height-in" name="height-in" min="0" step="1" placeholder="e.g. 9" required>
-            <span class="error-msg" data-for="height-in">Required, 0–11 in</span>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-block" id="calc-btn">Calculate BMI</button>
-        <button type="button" class="btn btn-outline btn-block" id="reset-btn">Reset</button>
-      </form>
-
-      <!-- Result -->
-      <div class="result" id="result" aria-live="polite">
-        <div class="result-value">—</div>
-        <div class="result-category">Enter your measurements above</div>
-        <div class="range-suggestion" id="range-suggestion"></div>
+        <div class="error-msg" id="height-error" role="alert"></div>
       </div>
 
-      <!-- Scale -->
-      <div class="scale">
-        <div class="scale-item underweight" data-range="< 18.5"><span>&lt; 18.5</span>Underweight</div>
-        <div class="scale-item normal" data-range="18.5 – 24.9"><span>18.5 – 24.9</span>Normal</div>
-        <div class="scale-item overweight" data-range="25 – 29.9"><span>25 – 29.9</span>Overweight</div>
-        <div class="scale-item obese" data-range="≥ 30"><span>≥ 30</span>Obese</div>
+      <div class="actions">
+        <button type="submit" id="calculate-btn" disabled>Calculate BMI</button>
+        <button type="button" id="reset-btn">Reset</button>
       </div>
+    </form>
 
-      <p class="disclaimer">* For informational purposes only. Not a substitute for professional medical advice.</p>
-    </section>
+    <div class="result-card" id="result-card" aria-live="polite">
+      <div class="result-number" id="result-number">—</div>
+      <div class="result-category" id="result-category"></div>
+      <div class="result-range" id="result-range"></div>
+      <div class="result-formula">BMI = weight ÷ height²</div>
+    </div>
 
-    <footer class="site-footer">
-      <p>© 2026 · Built with <em>HTML</em>, <em>CSS</em>, &amp; minimal <em>JavaScript</em>.</p>
-    </footer>
-  </main>
+    <div class="legend" id="legend">
+      <div class="legend-tile" data-cat="under" style="--tile-color:#2B6CB0;">
+        <div class="range" style="color:#2B6CB0;">< 18.5</div>
+        <div class="name">Underweight</div>
+      </div>
+      <div class="legend-tile" data-cat="normal" style="--tile-color:#15803D;">
+        <div class="range" style="color:#15803D;">18.5 – 24.9</div>
+        <div class="name">Normal</div>
+      </div>
+      <div class="legend-tile" data-cat="over" style="--tile-color:#B45309;">
+        <div class="range" style="color:#B45309;">25 – 29.9</div>
+        <div class="name">Overweight</div>
+      </div>
+      <div class="legend-tile" data-cat="obese" style="--tile-color:#B91C1C;">
+        <div class="range" style="color:#B91C1C;">≥ 30</div>
+        <div class="name">Obese</div>
+      </div>
+    </div>
 
-  <script>
-    // ===== BMI Calculator Logic (Plain HTML/CSS/JS, no frameworks) =====
+    <p class="disclaimer">* For informational purposes only. Not a substitute for professional medical advice.</p>
+  </div>
 
-    const form = document.getElementById('bmi-form');
-    const result = document.getElementById('result');
-    const calcBtn = document.getElementById('calc-btn');
-    const resetBtn = document.getElementById('reset-btn');
-    const metricFields = document.querySelector('.metric-fields');
-    const imperialFields = document.querySelector('.imperial-fields');
+  <footer>© 2026 · Built with HTML, CSS, & minimal JavaScript.</footer>
+</main>
 
-    // Unit toggle handler (Imperial labels exposed via input placeholders)
-    document.querySelectorAll('input[name="unit"]')?.forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        if (e.target.value === 'metric') {
-          metricFields.style.display = 'grid';
-          imperialFields.style.display = 'none';
-        } else {
-          metricFields.style.display = 'none';
-          imperialFields.style.display = 'grid';
+<script>
+(function () {
+  const toggle = document.getElementById('unit-toggle');
+  const unitMetric = document.getElementById('unit-metric');
+  const unitImperial = document.getElementById('unit-imperial');
+
+  const weightKgInput = document.getElementById('weight-kg');
+  const weightLbInput = document.getElementById('weight-lb');
+  const heightCmInput = document.getElementById('height-cm');
+  const heightFtInput = document.getElementById('height-ft');
+  const heightInInput = document.getElementById('height-in');
+  const heightImperialRow = document.getElementById('height-imperial-row');
+  const weightLabel = document.getElementById('weight-label');
+  const heightLabel = document.getElementById('height-label');
+
+  const weightError = document.getElementById('weight-error');
+  const heightError = document.getElementById('height-error');
+
+  const form = document.getElementById('bmi-form');
+  const calcBtn = document.getElementById('calculate-btn');
+  const resetBtn = document.getElementById('reset-btn');
+
+  const resultCard = document.getElementById('result-card');
+  const resultNumber = document.getElementById('result-number');
+  const resultCategory = document.getElementById('result-category');
+  const resultRange = document.getElementById('result-range');
+  const legendTiles = document.querySelectorAll('.legend-tile');
+
+  const CATEGORY_COLORS = { under: '#2B6CB0', normal: '#15803D', over: '#B45309', obese: '#B91C1C' };
+  const CATEGORY_NAMES = { under: 'Underweight', normal: 'Normal', over: 'Overweight', obese: 'Obese' };
+
+  const LIMITS_METRIC = { minH: 50, maxH: 250, minW: 2, maxW: 300 };
+  const LIMITS_IMPERIAL = { minH_ft: 1, minH_in: 8, maxH_ft: 8, maxH_in: 2, minW: 4, maxW: 660 };
+
+  function currentUnit() {
+    return unitImperial.checked ? 'imperial' : 'metric';
+  }
+
+  // ---- Unit switching ----
+  function switchUnit() {
+    const unit = currentUnit();
+    toggle.dataset.unit = unit;
+    clearResult();
+    clearErrors();
+
+    if (unit === 'metric') {
+      weightKgInput.style.display = '';
+      weightLbInput.style.display = 'none';
+      heightCmInput.style.display = '';
+      heightImperialRow.style.display = 'none';
+      weightLabel.textContent = 'Weight (kg)';
+      heightLabel.textContent = 'Height (cm)';
+    } else {
+      weightKgInput.style.display = 'none';
+      weightLbInput.style.display = '';
+      heightCmInput.style.display = 'none';
+      heightImperialRow.style.display = 'flex';
+      weightLabel.textContent = 'Weight (lb)';
+      heightLabel.textContent = 'Height (ft, in)';
+    }
+    validate();
+  }
+  unitMetric.addEventListener('change', switchUnit);
+  unitImperial.addEventListener('change', switchUnit);
+
+  // ---- Helpers ----
+  function num(input) {
+    const v = parseFloat(input.value);
+    return Number.isFinite(v) ? v : null;
+  }
+
+  function getWeightKg() {
+    if (currentUnit() === 'metric') {
+      const v = num(weightKgInput);
+      return v === null ? null : v;
+    }
+    const lb = num(weightLbInput);
+    return lb === null ? null : lb * 0.45359237;
+  }
+
+  function getHeightM() {
+    if (currentUnit() === 'metric') {
+      const cm = num(heightCmInput);
+      return cm === null ? null : cm / 100;
+    }
+    const ft = num(heightFtInput) || 0;
+    const inch = num(heightInInput) || 0;
+    if (heightFtInput.value === '' && heightInInput.value === '') return null;
+    const totalIn = ft * 12 + inch;
+    return totalIn <= 0 ? null : totalIn * 0.0254;
+  }
+
+  function clearErrors() {
+    weightError.textContent = '';
+    heightError.textContent = '';
+    weightKgInput.removeAttribute('aria-invalid');
+    weightLbInput.removeAttribute('aria-invalid');
+    heightCmInput.removeAttribute('aria-invalid');
+    heightFtInput.removeAttribute('aria-invalid');
+    heightInInput.removeAttribute('aria-invalid');
+  }
+
+  function clearResult() {
+    resultCard.classList.remove('visible');
+    resultNumber.textContent = '—';
+    resultNumber.style.color = '';
+    resultCategory.textContent = '';
+    resultRange.textContent = '';
+    legendTiles.forEach(t => t.classList.remove('active'));
+  }
+
+  // ---- Validation ----
+  function validate() {
+    clearErrors();
+    let valid = true;
+    const unit = currentUnit();
+
+    const weightKg = getWeightKg();
+    const heightM = getHeightM();
+
+    // Weight checks
+    if (unit === 'metric') {
+      if (weightKgInput.value !== '' && weightKg !== null) {
+        if (weightKg < LIMITS_METRIC.minW || weightKg > LIMITS_METRIC.maxW) {
+          weightError.textContent = `Enter a weight between ${LIMITS_METRIC.minW}–${LIMITS_METRIC.maxW} kg.`;
+          weightKgInput.setAttribute('aria-invalid', 'true');
+          valid = false;
         }
-        // Clear previous result
-        updateResultUI('—', 'Enter your measurements above', '');
-      });
-    });
-
-    // Calculate BMI: Weight (kg) ÷ Height (m)²
-    function calculateBMI(weight, height, unit) {
-      let bmi;
-      if (unit === 'metric') {
-        // Metric: weight in kg, height in cm → convert to m
-        bmi = weight / ((height / 100) ** 2);
       } else {
-        // Imperial: weight in lbs → kg, height in ft+in → m
-        const heightIn = parseFloat(document.getElementById('height-in').value) || 0;
-        const heightTotalIn = parseFloat(document.getElementById('height-ft').value) * 12 + heightIn;
-        const heightM = (heightTotalIn * 2.54) / 100; // inches → cm → meters
-        const weightKg = parseFloat(weight) / 2.205; // lbs → kg
-        bmi = weightKg / (heightM ** 2);
+        valid = false;
       }
-      return Math.round(bmi * 10) / 10; // Round to 1 decimal place
-    }
-
-    // Get BMI category
-    function getBMICategory(bmi) {
-      if (bmi < 18.5) return 'Underweight';
-      if (bmi < 25) return 'Normal weight';
-      if (bmi < 30) return 'Overweight';
-      return 'Obese';
-    }
-
-    // Get category class for coloring
-    function getBMIClass(bmi) {
-      if (bmi < 18.5) return 'underweight';
-      if (bmi < 25) return 'normal';
-      if (bmi < 30) return 'overweight';
-      return 'obese';
-    }
-
-    // Calculate healthy weight range for given height
-    function getHealthyRange(height, unit) {
-      if (!height || height <= 0) return '';
-      let minBMI = 18.5;
-      let maxBMI = 24.9;
-      let heightM;
-      if (unit === 'metric') {
-        heightM = height / 100;
-      } else {
-        const heightIn = parseFloat(document.getElementById('height-in').value) || 0;
-        const heightTotalIn = parseFloat(document.getElementById('height-ft').value) * 12 + heightIn;
-        heightM = (heightTotalIn * 2.54) / 100;
-      }
-      const minWeightKg = (minBMI * heightM ** 2).toFixed(1);
-      const maxWeightKg = (maxBMI * heightM ** 2).toFixed(1);
-      return `Healthy range for your height: ${minWeightKg}–${maxWeightKg} kg`;
-    }
-
-    // Validate inputs (reject unrealistic values)
-    function validateInputs(unit) {
-      let isValid = true;
-      const weightInput = document.getElementById(unit === 'metric' ? 'weight-kg' : 'weight-lb');
-      const heightInputs = unit === 'metric'
-        ? ['height-cm']
-        : ['height-ft', 'height-in'];
-
-      // Check weight (reject < 2kg or > 300kg)
-      const weight = parseFloat(weightInput.value);
-      if (!weight || weight < 2 || weight > 300) {
-        showError(weightInput, true);
-        isValid = false;
-      } else {
-        showError(weightInput, false);
-      }
-
-      // Check height (reject unrealistic human heights)
-      let heightValid = true;
-      let heightValue = 0;
-      if (unit === 'metric') {
-        heightValue = parseFloat(document.getElementById('height-cm').value);
-        if (!heightValue || heightValue < 50 || heightValue > 250) heightValid = false;
-      } else {
-        const ft = parseFloat(document.getElementById('height-ft').value) || 0;
-        const inches = parseFloat(document.getElementById('height-in').value) || 0;
-        heightValue = ft * 12 + inches;
-        if (!ft || ft < 1 || ft > 10 || inches < 0 || inches > 11 || heightValue < 60 || heightValue > 83) heightValid = false;
-      }
-
-      heightInputs.forEach(id => {
-        const el = document.getElementById(id);
-        if (heightValid) {
-          showError(el, false);
-        } else {
-          showError(el, true);
-          isValid = false;
+    } else {
+      if (weightLbInput.value !== '' && weightKg !== null) {
+        const lb = num(weightLbInput);
+        if (lb < LIMITS_IMPERIAL.minW || lb > LIMITS_IMPERIAL.maxW) {
+          weightError.textContent = `Enter a weight between ${LIMITS_IMPERIAL.minW}–${LIMITS_IMPERIAL.maxW} lb.`;
+          weightLbInput.setAttribute('aria-invalid', 'true');
+          valid = false;
         }
-      });
-
-      return isValid && heightValue;
+      } else {
+        valid = false;
+      }
     }
 
-    // Show/hide error messages (inline validation feedback)
-    function showError(el, show) {
-      const errorEl = el.parentElement.querySelector('.error-msg');
-      if (errorEl) errorEl.style.display = show ? 'block' : 'none';
-      el.setAttribute('aria-invalid', show);
-    }
-
-    // Update result UI with color coding and animation
-    function updateResultUI(bmi, category, healthyRange) {
-      const valueEl = result.querySelector('.result-value');
-      const catEl = result.querySelector('.result-category');
-      const rangeEl = result.querySelector('.range-suggestion');
-
-      // Trigger animation on result card
-      result.style.transform = 'scale(0.95)';
-      setTimeout(() => result.style.transform = 'scale(1)', 150);
-
-      valueEl.textContent = bmi;
-      catEl.textContent = category;
-      catEl.className = `result-category ${getBMIClass(bmi)}`;
-      rangeEl.textContent = healthyRange;
-    }
-
-    // Handle form submission
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const unit = document.querySelector('input[name="unit"]:checked')?.value;
-      const height = validateInputs(unit);
-      if (!height) return;
-
-      const weight = parseFloat(document.getElementById(unit === 'metric' ? 'weight-kg' : 'weight-lb').value);
-      const bmi = calculateBMI(weight, height, unit);
-      const category = getBMICategory(bmi);
-      const healthyRange = getHealthyRange(height, unit);
-
-      // Highlight the matching scale item
-      highlightScaleItem(bmi);
-
-      updateResultUI(bmi, category, healthyRange);
-    });
-
-    // Highlight the matching category in the scale
-    function highlightScaleItem(bmi) {
-      document.querySelectorAll('.scale-item').forEach(item => {
-        item.classList.remove('highlight');
-        if (item.dataset.range && bmi < 18.5 && item.dataset.range.includes('< 18.5')) {
-          item.classList.add('highlight');
-        } else if (item.dataset.range === '18.5 – 24.9' && bmi >= 18.5 && bmi < 25) {
-          item.classList.add('highlight');
-        } else if (item.dataset.range === '25 – 29.9' && bmi >= 25 && bmi < 30) {
-          item.classList.add('highlight');
-        } else if (item.dataset.range.includes('≥ 30') && bmi >= 30) {
-          item.classList.add('highlight');
+    // Height checks
+    if (unit === 'metric') {
+      if (heightCmInput.value !== '' && heightM !== null) {
+        const cm = heightM * 100;
+        if (cm < LIMITS_METRIC.minH || cm > LIMITS_METRIC.maxH) {
+          heightError.textContent = `Enter a height between ${LIMITS_METRIC.minH}–${LIMITS_METRIC.maxH} cm.`;
+          heightCmInput.setAttribute('aria-invalid', 'true');
+          valid = false;
         }
-      });
+      } else {
+        valid = false;
+      }
+    } else {
+      if (heightM !== null) {
+        const totalIn = heightM / 0.0254;
+        const minIn = LIMITS_IMPERIAL.minH_ft * 12 + LIMITS_IMPERIAL.minH_in;
+        const maxIn = LIMITS_IMPERIAL.maxH_ft * 12 + LIMITS_IMPERIAL.maxH_in;
+        if (totalIn < minIn || totalIn > maxIn) {
+          heightError.textContent = `Enter a height between ${LIMITS_IMPERIAL.minH_ft}'${LIMITS_IMPERIAL.minH_in}" and ${LIMITS_IMPERIAL.maxH_ft}'${LIMITS_IMPERIAL.maxH_in}".`;
+          heightFtInput.setAttribute('aria-invalid', 'true');
+          heightInInput.setAttribute('aria-invalid', 'true');
+          valid = false;
+        }
+      } else {
+        valid = false;
+      }
     }
 
-    // Reset button handler
-    resetBtn.addEventListener('click', () => {
-      form.reset();
-      document.querySelectorAll('.scale-item').forEach(item => item.classList.remove('highlight'));
-      updateResultUI('—', 'Enter your measurements above', '');
-      // Hide all error messages
-      document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
-    });
+    calcBtn.disabled = !valid;
+    return valid;
+  }
 
-    // Add subtle animation on load
-    window.addEventListener('load', () => {
-      document.body.classList.add('loaded');
+  [weightKgInput, weightLbInput, heightCmInput, heightFtInput, heightInInput].forEach(input => {
+    input.addEventListener('input', () => {
+      clearResult();
+      validate();
     });
-  </script>
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (!calcBtn.disabled) calculate();
+      }
+    });
+  });
+
+  // ---- Category logic ----
+  function categoryFor(bmi) {
+    if (bmi < 18.5) return 'under';
+    if (bmi < 25) return 'normal';
+    if (bmi < 30) return 'over';
+    return 'obese';
+  }
+
+  // ---- Calculate ----
+  function calculate() {
+    if (!validate()) return;
+
+    const weightKg = getWeightKg();
+    const heightM = getHeightM();
+    const bmi = weightKg / (heightM * heightM);
+    const cat = categoryFor(bmi);
+    const color = CATEGORY_COLORS[cat];
+
+    resultNumber.textContent = bmi.toFixed(1);
+    resultNumber.style.color = color;
+    resultCategory.textContent = CATEGORY_NAMES[cat];
+    resultCategory.style.color = color;
+
+    // Healthy weight range for this height, in current unit
+    const minKg = 18.5 * heightM * heightM;
+    const maxKg = 24.9 * heightM * heightM;
+    if (currentUnit() === 'metric') {
+      resultRange.textContent = `Healthy range for your height: ${minKg.toFixed(0)}–${maxKg.toFixed(0)} kg`;
+    } else {
+      const minLb = minKg / 0.45359237;
+      const maxLb = maxKg / 0.45359237;
+      resultRange.textContent = `Healthy range for your height: ${minLb.toFixed(0)}–${maxLb.toFixed(0)} lb`;
+    }
+
+    legendTiles.forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+
+    resultCard.classList.remove('visible');
+    // reflow to restart transition
+    resultCard.offsetHeight;
+    requestAnimationFrame(() => resultCard.classList.add('visible'));
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    calculate();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    form.reset();
+    unitMetric.checked = true;
+    switchUnit();
+    clearErrors();
+    clearResult();
+    calcBtn.disabled = true;
+    weightKgInput.focus();
+  });
+
+  // Initial state
+  switchUnit();
+})();
+</script>
 </body>
 </html>
